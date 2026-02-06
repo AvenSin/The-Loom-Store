@@ -1,13 +1,40 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
+  <head>
     <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>The Loom Store</title>
+    <title>THE LOOM STORE | Streetwear & Culture</title>
+    
+    <!-- Tailwind CSS for styling -->
     <script src="https://cdn.tailwindcss.com"></script>
-</head>
-<body class="bg-black">
+    
+    <!-- Google Fonts: Anton (Brand) and Inter (Body) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+
+    <style>
+      /* Prevent horizontal scroll issues and ensure smooth scrolling */
+      html {
+        scroll-behavior: smooth;
+        overflow-x: hidden;
+      }
+      body {
+        margin: 0;
+        padding: 0;
+        background-color: #ffffff;
+      }
+      #root {
+        min-height: 100vh;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- React renders the app into this div -->
     <div id="root"></div>
+
+    <!-- This links to your React code. Make sure your file is named App.jsx and is in the src folder -->
     <script type="module" src="/src/App.jsx"></script>
-</body>
+  </body>
 </html>
