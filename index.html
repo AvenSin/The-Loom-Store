@@ -1,40 +1,223 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>THE LOOM STORE | Streetwear & Culture</title>
-    
-    <!-- Tailwind CSS for styling -->
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>THE LOOM STORE | Streetwear</title>
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    
-    <!-- Google Fonts: Anton (Brand) and Inter (Body) -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <!-- React & Babel (For running JSX directly in browser) -->
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Brand Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
-
     <style>
-      /* Prevent horizontal scroll issues and ensure smooth scrolling */
-      html {
-        scroll-behavior: smooth;
-        overflow-x: hidden;
-      }
-      body {
-        margin: 0;
-        padding: 0;
-        background-color: #ffffff;
-      }
-      #root {
-        min-height: 100vh;
-      }
+        body { margin: 0; font-family: 'Inter', sans-serif; overflow-x: hidden; }
+        .font-brand { font-family: 'Anton', sans-serif; }
+        .stroke-text { -webkit-text-stroke: 2px white; color: transparent; }
+        .polaroid {
+            background: white; padding: 12px 12px 40px 12px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+            transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .polaroid:hover { transform: scale(1.05); z-index: 50; }
+        .cart-sidebar { transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
     </style>
-  </head>
-  <body>
-    <!-- React renders the app into this div -->
+</head>
+<body>
     <div id="root"></div>
 
-    <!-- This links to your React code. Make sure your file is named App.jsx and is in the src folder -->
-    <script type="module" src="/src/App.jsx"></script>
-  </body>
+    <script type="text/babel">
+        const { useState, useEffect } = React;
+
+        const PRODUCTS = [
+            {
+                id: "f4-tee",
+                name: "The Fantastic Four '97",
+                price: 65,
+                category: "Merch",
+                images: [
+                    "https://instagram.fdel1-3.fna.fbcdn.net/v/t51.82787-15/535624466_17847724314542036_7382327412451755351_n.jpg?stp=dst-jpg_e35_tt6&_nc_cat=111&ig_cache_key=MzcwMzU0ODMxMTE0NTE5MDA3Mw%3D%3D.3-ccb7-5&ccb=7-5&_nc_sid=58cdad&efg=eyJ2ZW5jb2RlX3RhZyI6InhwaWRzLjE0NDB4MTQ0MC5zZHIuQzMifQ%3D%3D&_nc_ohc=rK9nO-E_uh4Q7kNvwGJSKid&_nc_oc=AdlOVrGM8VSWReTMJA8mJTbnBqpJS66RHT0YoxxmwuliKZ2kH8uQHnRuRDugm1yUeLI&_nc_ad=z-m&_nc_cid=1174&_nc_zt=23&_nc_ht=instagram.fdel1-3.fna&_nc_gid=C2OG_rZq_jWhV93X3m80Aw&oh=00_Afv4EoybMtUVZxhoZK8mMEmZWU61T5s44zZV5bIdlGEFJA&oe=698BF3F5",
+                    "https://instagram.fdel1-7.fna.fbcdn.net/v/t51.82787-15/535670978_17847724323542036_4085854514222670906_n.jpg?stp=dst-jpg_e35_tt6&_nc_cat=103&ig_cache_key=MzcwMzU0ODMxMTE1MzQ5NzQ3NA%3D%3D.3-ccb7-5&ccb=7-5&_nc_sid=58cdad&efg=eyJ2ZW5jb2RlX3RhZyI6InhwaWRzLjYxOXg2MTkuc2RyLkMzIn0%3D&_nc_ohc=HUY9chVgZroQ7kNvwHStwnd&_nc_oc=Admv8WVxlKgpOzKTfkhBIL6yUkN9oITp4sDWF9WFutqShGzFj4QtYZgxazNG9Ob1PxY&_nc_ad=z-m&_nc_cid=1174&_nc_zt=23&_nc_ht=instagram.fdel1-7.fna&_nc_gid=C2OG_rZq_jWhV93X3m80Aw&oh=00_AfvzNnyF0FVHdnlqv7ALHEPcUOzNtMsp2JAjSq997P3j6w&oe=698C0D2D"
+                ],
+                description: "Ultra-heavyweight vintage wash."
+            },
+            {
+                id: "meme-1",
+                name: "Error 404: Chill Not Found",
+                price: 45,
+                category: "Meme",
+                images: ["https://images.unsplash.com/photo-1576566588028-4147f3842f27?auto=format&fit=crop&q=80&w=800"],
+                description: "Heavyweight cotton tee."
+            },
+            {
+                id: "f4-hoodie",
+                name: "Doom Box Hoodie",
+                price: 120,
+                category: "Merch",
+                images: ["https://images.unsplash.com/photo-1556821840-3a63f95609a7?auto=format&fit=crop&q=80&w=800"],
+                description: "450GSM French Terry."
+            }
+        ];
+
+        const App = () => {
+            const [cart, setCart] = useState([]);
+            const [cartOpen, setCartOpen] = useState(false);
+            const [activeFilter, setActiveFilter] = useState('all');
+            const [scrolled, setScrolled] = useState(false);
+
+            useEffect(() => {
+                const handleScroll = () => setScrolled(window.scrollY > 100);
+                window.addEventListener('scroll', handleScroll);
+                lucide.createIcons();
+                return () => window.removeEventListener('scroll', handleScroll);
+            }, []);
+
+            useEffect(() => {
+                lucide.createIcons();
+            }, [cartOpen, activeFilter]);
+
+            const addToCart = (p) => { 
+                setCart([...cart, p]); 
+                setCartOpen(true); 
+            };
+            
+            const removeFromCart = (i) => setCart(cart.filter((_, idx) => idx !== i));
+            
+            const filteredProducts = activeFilter === 'all' 
+                ? PRODUCTS 
+                : PRODUCTS.filter(p => p.category === activeFilter);
+
+            const total = cart.reduce((sum, item) => sum + item.price, 0);
+
+            return (
+                <div className="min-h-screen bg-white">
+                    {/* Navbar */}
+                    <nav className={`fixed top-0 w-full z-[100] transition-all duration-500 border-b ${scrolled ? 'bg-white shadow-lg py-3 border-black/5' : 'bg-transparent py-5 border-white/10'}`}>
+                        <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
+                            <div onClick={() => {setActiveFilter('all'); window.scrollTo(0,0)}} className={`flex flex-col items-start leading-none cursor-pointer ${scrolled ? 'text-black' : 'text-white'}`}>
+                                <span className="text-[10px] font-bold tracking-[0.2em]">THE</span>
+                                <span className="text-4xl font-brand uppercase tracking-tighter">LOOM STORE</span>
+                            </div>
+                            <div className={`hidden md:flex space-x-12 text-[11px] font-black tracking-[0.2em] uppercase ${scrolled ? 'text-gray-500' : 'text-gray-300'}`}>
+                                <button onClick={() => setActiveFilter('Merch')} className={`hover:text-red-500 ${activeFilter === 'Merch' ? 'text-red-600 underline' : ''}`}>Merch</button>
+                                <button onClick={() => setActiveFilter('Meme')} className={`hover:text-red-500 ${activeFilter === 'Meme' ? 'text-red-600 underline' : ''}`}>Memes</button>
+                                <button onClick={() => setActiveFilter('all')} className="hover:text-white">New Arrivals</button>
+                            </div>
+                            <div className={`flex items-center space-x-6 ${scrolled ? 'text-black' : 'text-white'}`}>
+                                <button onClick={() => setCartOpen(true)} className="relative hover:scale-110 transition-transform">
+                                    <i data-lucide="shopping-bag" className="w-6 h-6"></i>
+                                    {cart.length > 0 && (
+                                        <span className="absolute -top-2 -right-2 w-5 h-5 bg-red-600 text-white rounded-full text-[10px] flex items-center justify-center font-bold">
+                                            {cart.length}
+                                        </span>
+                                    )}
+                                </button>
+                            </div>
+                        </div>
+                    </nav>
+
+                    {/* Cart Sidebar */}
+                    <div className={`fixed inset-0 z-[110] transition-opacity duration-300 ${cartOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}>
+                        <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setCartOpen(false)}></div>
+                        <div className={`absolute top-0 right-0 h-full w-full max-w-md bg-white shadow-2xl flex flex-col p-6 cart-sidebar transform ${cartOpen ? 'translate-x-0' : 'translate-x-full'}`}>
+                            <div className="flex justify-between items-center mb-8 border-b-2 border-black pb-4">
+                                <h2 className="font-brand text-3xl uppercase tracking-tighter">Your Bag ({cart.length})</h2>
+                                <button onClick={() => setCartOpen(false)} className="hover:rotate-90 transition-transform">
+                                    <i data-lucide="x" className="w-8 h-8"></i>
+                                </button>
+                            </div>
+                            <div className="flex-1 overflow-y-auto space-y-6">
+                                {cart.length === 0 ? (
+                                    <div className="h-full flex flex-col items-center justify-center text-gray-400">
+                                        <i data-lucide="shopping-bag" className="w-16 h-16 mb-4 opacity-20"></i>
+                                        <p className="font-brand text-xl uppercase">Nothing here yet</p>
+                                    </div>
+                                ) : cart.map((item, i) => (
+                                    <div key={i} className="flex gap-4 border-b border-gray-100 pb-4">
+                                        <img src={item.images[0]} className="w-20 h-24 object-cover border border-gray-200" />
+                                        <div className="flex-1 flex flex-col justify-between">
+                                            <div>
+                                                <h4 className="font-brand uppercase text-xl leading-none">{item.name}</h4>
+                                                <p className="font-bold text-gray-400 text-sm mt-1">${item.price}</p>
+                                            </div>
+                                            <button onClick={() => removeFromCart(i)} className="text-red-500 text-[10px] mt-2 uppercase font-black flex items-center gap-1 hover:text-black">
+                                                <i data-lucide="trash-2" className="w-3 h-3"></i> Remove
+                                            </button>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                            <div className="pt-6 border-t-2 border-black mt-4">
+                                <div className="flex justify-between font-brand text-2xl uppercase mb-4">
+                                    <span>Total</span>
+                                    <span>${total}</span>
+                                </div>
+                                <button className="w-full bg-black text-white py-5 font-black uppercase tracking-widest hover:bg-red-600 transition-colors">
+                                    Checkout Now
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Hero Section */}
+                    <section className="relative h-screen bg-black overflow-hidden flex items-center px-8 md:px-20">
+                        <img src="https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?auto=format&fit=crop&q=80&w=2000" className="absolute inset-0 w-full h-full object-cover opacity-50" />
+                        <div className="relative z-10 w-full max-w-4xl">
+                            <h1 className="text-7xl md:text-[9vw] font-brand text-white uppercase leading-[0.85] mb-10">
+                                WEAR YOUR<br/><span className="stroke-text">ATTITUDE</span>
+                            </h1>
+                            <button onClick={() => document.getElementById('products-section').scrollIntoView({behavior:'smooth'})} className="group flex items-center gap-4 bg-white text-black px-12 py-6 text-sm font-black uppercase hover:bg-red-600 hover:text-white transition-all">
+                                Shop Collection <i data-lucide="arrow-right" className="w-5 h-5 group-hover:translate-x-2 transition-transform"></i>
+                            </button>
+                        </div>
+                    </section>
+
+                    {/* Main Products Grid */}
+                    <main id="products-section" className="max-w-7xl mx-auto px-6 py-24">
+                        <div className="flex items-center gap-4 mb-16 border-b-4 border-black pb-4">
+                            <h2 className="text-6xl md:text-8xl font-brand uppercase leading-none">
+                                {activeFilter === 'all' ? 'The Collection' : activeFilter}
+                            </h2>
+                            <span className="bg-black text-white px-3 py-1 text-sm font-bold">{filteredProducts.length}</span>
+                        </div>
+                        
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
+                            {filteredProducts.map(p => (
+                                <div key={p.id} className="group flex flex-col gap-4">
+                                    <div className="relative aspect-[4/5] bg-gray-50 overflow-hidden border border-gray-100 group-hover:border-black transition-all">
+                                        <img src={p.images[0]} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
+                                        <div className="absolute bottom-0 w-full p-4 translate-y-full group-hover:translate-y-0 transition-transform duration-300">
+                                            <button onClick={() => addToCart(p)} className="w-full bg-black text-white py-4 text-xs font-black uppercase tracking-widest hover:bg-red-600 transition-colors">
+                                                Add to Cart
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div className="flex justify-between items-start">
+                                        <h3 className="font-brand text-3xl uppercase leading-none">{p.name}</h3>
+                                        <span className="font-black text-xl">${p.price}</span>
+                                    </div>
+                                    <p className="text-[10px] text-gray-400 font-bold uppercase tracking-widest">{p.category}</p>
+                                </div>
+                            ))}
+                        </div>
+                    </main>
+
+                    <footer className="bg-black text-white py-20 px-8 border-t-8 border-red-600 mt-20">
+                        <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-8">
+                            <h4 className="text-4xl font-brand uppercase tracking-tighter">THE LOOM STORE.</h4>
+                            <p className="text-gray-500 font-bold text-xs uppercase tracking-widest">© 2024 Loom X Worldwide</p>
+                        </div>
+                    </footer>
+                </div>
+            );
+        };
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
 </html>
